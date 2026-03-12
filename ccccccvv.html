@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subject-Verb Agreement Checker</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f5f5f5;display:flex;flex-direction:column;align-items:center;}
+header{background:#003366;color:white;padding:20px;text-align:center;font-size:24px;font-weight:bold;width:100%;}
+nav{display:flex;justify-content:center;align-items:center;gap:30px;background:#0055aa;padding:12px;width:100%;border-bottom-left-radius:20px;border-bottom-right-radius:20px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+nav a{color:white;text-decoration:none;font-weight:bold;font-size:15px;transition:0.3s;}
+nav a:hover{color:#ffd700;}
+.page{display:flex;justify-content:center;width:100%;}
+.container{margin:20px;text-align:left;max-width:900px;width:100%;background:white;padding:25px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+.topic-btn{display:inline-block;margin:10px 5px;padding:12px 20px;font-size:16px;background:#003366;color:white;border:none;border-radius:6px;cursor:pointer;}
+.topic-btn:hover{background:#0055aa;}
+textarea{width:100%;min-height:200px;padding:12px;font-size:15px;margin-top:10px;}
+.result{margin-top:15px;font-weight:bold;}
+.answer-box{margin-top:15px;background:#f9f9f9;padding:15px;border-left:4px solid #003366;display:none;}
+.ad-inline{margin:15px 0;background:#ccc;padding:15px;text-align:center;font-weight:bold;}
+.ad-side{width:160px;background:#ddd;text-align:center;padding:10px;font-weight:bold;}
+@media(max-width:900px){.ad-side{display:none;}}
+footer{background:#003366;color:white;padding:15px;text-align:center;margin-top:20px;width:100%;}
+</style>
+</head>
+<body>
+
+<header>Course Topics</header>
+
+<nav>
+<a href="#">Topics</a>
+<a href="#">PDFs</a>
+<a href="#">About</a>
+</nav>
+
+<div class="page">
+<div class="ad-side">Left Ad</div>
+<div class="container">
+<div class="ad-inline">Top Banner Ad</div>
+
+<h2 id="courseName"></h2>
+<h3 id="questionNumber"></h3>
+
+<h3>Question: Subject–Verb Agreement</h3>
+<p><strong>Instruction:</strong><br>Identify the subject–verb agreement errors. You can write just the correct subject-verb pair or the full corrected sentence.</p>
+<p id="passage" style="background:#f0f0f0; padding:15px; border-radius:6px;"></p>
+
+<label><strong>Your answers (numbered):</strong></label>
+<textarea id="answer" placeholder="1. ...&#10;2. ..."></textarea>
+
+<button class="topic-btn" onclick="prevQuestion()">Previous</button>
+<button class="topic-btn" onclick="checkAnswer()">Submit Answer</button>
+<button class="topic-btn" onclick="nextQuestion()">Next</button>
+<button id="showBtn" class="topic-btn" onclick="showAnswers()" disabled>Show Correct Answers</button>
+
+<div id="result" class="result"></div>
+<div id="answerBox" class="answer-box"></div>
+
+<div class="ad-inline">In-Page Ad</div>
+</div>
+<div class="ad-side">Right Ad</div>
+</div>
+
+<footer>&copy; 2026 IQ Tech Platform</footer>
+
+<script>
+// Course Name
+const course = localStorage.getItem('selectedCourse') || 'English Language';
+document.getElementById('courseName').innerText = `Course: ${course.replace('_',' ').toUpperCase()}`;
+
+// Questions
+const questions = [
+`There is many reasons why people prefers online learning. Students enjoys flexibility, but some of them struggles with distractions. The teachers often explains lessons quickly, and it sometimes confuse learners. There was several online platforms that offers free courses. The materials are useful but sometimes it lack examples. In many cases, homework and quizzes helps students improve, yet some assignments does not make sense. The study groups is important but rarely utilized. Feedbacks from instructors is helpful for progress. There are opportunities for collaboration, but some learners ignores them. Overall, online learning have advantages and disadvantages`,
+`The recent increase in global temperatures have alarmed scientists and environmentalists alike. Many believes that climate change are primarily caused by human activities. However, not everyone agree with this view. Some individuals argue that natural phenomena also contributes significantly to these changes. A group of researchers conducts an experiment last year. They discovers that melting glaciers was occurring at a faster rate than previously recorded. Despite their findings, many governments continues to ignore warnings. Yet, authorities insists that enough measures has been taken. Unfortunately, few students adopts these habits consistently outside the classroom. Tackling climate change require collective effort. Hope still exist for a sustainable future.`,
+`The global economy is experiencing the deepest downtown in the post- World War 11, as the financial crisis rapidly spread around the world. A large number of advanced economies has fallen into recession and economies in the rest of the world has slowed abruptly. Global trade and financial flows is shrinking while output and employment losses mounts. The Credit market as well borrowers remain frozen and banks that was once vibrant now struggles to keep their financial health. Ghana has not been spared the economic headwinds. Figures published recently shows that Ghana's debt is huge. The government therefore have to approach the International Monetary Fund for support. Following the approach, a fact-finding delegation from the Fund arrive for discussions with the government after which it will call for a Debt Sustainability Analysis (DSA). The negotiations with government team is meant to determine the form that an economic stabilisation programme should talk. It will also explore the nature of the police, reforms and programmes that the loan support should entail. The results of the negotiations forms the basis for a staff decision on Ghana's economic support request. Our leaders in government together with policymarkers plays important role in the recovery by properly engaging all the relevant stakeholders. All needs to demonstrate good faith and supports the government.`,
+`The committee, along with its advisors, were unsure about the next course of action. Each of the members have their own opinion on how the issue should be resolved. The results of the experiments, which was conducted in different laboratories, shows inconsistencies that are difficult to explain. The number of students applying for scholarships have increased, but the criteria for selection remain unclear. The president, as well as the board of directors, were
+present at the meeting. Neither of the solutions are entirely satisfactory, and every possible outcome require careful consideration. There are a significant gap between what the
+policymakers promise and what the government deliver. The data collected from the various studies suggests that the new policy may not be effective, but the evidence do not fully support
+this conclusion. A series of unfortunate events have led to the project's delay, but neither the supervisor nor the employees was taking full responsibility. The faculty, which includes both experienced and new lecturers, were discussing the revised curriculum. Many a researcher have struggled with the complexity of these findings, and no one, not even the experts, know the ultimate solution. The jury, despite their differing opinions, was expected to reach a unanimous verdict. The rise in unemployment rates, coupled with the increase in inflation, make economic recovery a challenge. The list of recommended books, along with the required readings, are available at the library.`,
+`The recent increase in global temperatures have alarmed scientists and environmentalists alike. Many believes that climate change are primarily caused by human activities such as deforestation and burning fossil fuels. However, not everyone agree with this view. Some individuals argue that natural phenomena also contributes significantly to these changes. A group of researchers conducts an experiment last year to study the impact of greenhouse gases on polar ice caps. They discovers that melting glaciers was occurring at a faster rate than previously recorded.
+Despite their findings, many governments continues to ignore warnings about the dangers posed by rising sea levels. In some regions, communities face severe flooding during rainy seasons due to inadequate infrastructure planning. Yet, authorities insists that enough measures has been taken to prevent disasters. Interestingly, renewable energy sources like solar panels and wind turbines provides sustainable solutions to combat climate change. But adoption rates remains low because of high initial costs.
+For example, a family living in rural areas might finds it difficult to afford installing solar systems without government subsidies. Furthermore, misinformation spreads. rapidly online discourages people from embracing eco-friendly practices. Education plays a crucial role in addressing misconceptions regarding climate change. Schools across the world teaches students about environmental conservation, but results vary widely depending on resources available. Teachers emphasize the importance of reducing waste, reusing materials, and recycling whenever possible. Unfortunately, few students adopts these habits consistently outside the classroom. Tackling climate change require collective effort from individuais, organizations, and governments worldwide. While progress seems slow, hope still exist for creating a more sustainable future if action is prioritized immediately`,
+`For the past few years and particularly this year, there has been a number of grave concerns expressed by many Ghanaians regarding either safety conditions as well as security that
+vaul
+(prevails in
+the country. The migration of people in the major cities with limited chances of
+gainful jobs have also increased instances of many crimes. Statistics shows that a great deal of people decides to move to the urban areas not only to seek greener pastures, but to engage in these unpleasant activities. This set of unfortunate situations in Ghana lead to the undermining of development and progress for our country. Drastic measures, as a matter of fact, needs to be taken to address them. As a country, we have to take a second look at our
+Combedt
+security agencies, particularly the Ghana Armed Forces which, more often, combats) criminal activities. The police needs to sit up and work for the betterment of the country. The government should resource the security agencies adequately to enable them to fight crime effectively. It is the primary responsibility of the state to ensure the security of either the strong or the weak who lives in the country. We need to understand that good security in conjunction with safety mechanisms promote peace and socio-economic development. It is incumbent on the public to report any litany of activities that poses a threat to national security. If we do not solve this problems, the majority of the people is going to be blamed when the situation get out of hand.`,
+`On the broadest scale, the rate at which energy are received from the sun and the rate at which it is lost to space determines the equilibrium temperature and climate of earth. This energy is distributed around the globe by winds, ocean currents, and other mechanism to affect the climates of different regions. Factors that shapes climate is called climate forcings or "forcing mechanisms". These include processes such as variations in solar radiation, variations in the Earth's orbit, mountain-building and continental drift as well as changes in greenhouse gas concentrations. There are a variety of climate change feedbacks that amplifies or diminishes the initial forcing. Some parts of the climate system such as the oceans and ice caps responds slowly in reaction to climate forcings whereas others respond more quickly. Forcing mechanisms can be either "internal" or "external". Internal forcing mechanisms is natural processes within the climate
+system itself. On the other hand, external forcing mechanisms can be either natural (e.g. changes in solar output) or anthropogenic. Whether the initial forcing mechanism are internal or external, the response of the climate system might be fast, slow, or a combination of both. Therefore, the climate system can respond abruptly, but the full response to forcing mechanisms might not be
+fully developed for centuries or even longer.`,
+`The nations in the western world where class struggle were often sublimated by high wages and decent social welfare provision maintains a relatively stable system only because of historic shifts
+away from unfettered capitalism. But such social institutions is aberrations, the result of class struggle or a historic alignment of political and economic factors. Either way, the underlying accumulation of capital always reassert the primacy of capitalist decline in the end. Before we discuss the notions of capitalism, including the laws and tendencies, there are also trends and cycles which exposes the rhythm capitalist profits to be discussed. Because of the internal dynamics of capitalism, there is an inherent tendency towards breakdown - this is known as the business cycle or boom and bust as some people like to call it. So what is something specific about how crisis develop under capitalism and how they disrupts the apparent equilibrium of the system?
+A passage in the Communist Manifesto indicate the beginnings of Marx's theory of capitalist crisis.
+He writes, "In these crises,
+... Society suddenly finds itself put back into a state of momentary
+barbarism; it appears as if a famine, a universal war of devastation, had cut off the supply of every means of subsistence; industry and commerce seems to be destroyed; and why? Marx explain that
+it is because there is "too much civilization, too much means of subsistence, too much industry,
+too much commerce.`,
+`The global economy is experiencing the deepest downtown in the post-World War II, as the financial crisis rapidly spread around the world. A large number of advanced economies has fallen into recession and economies in the rest of the world has slowed abruptly Global trade and financial flows is shrinking while output and employment losses mounts. The Credit market as well as borrowers remain frozen and banks that was once vibrant now struggles to keep their financial health. Ghana has not been spared the economic headwinds. Figures published recently shows that Ghana's debt is huge. The government therefore have to approach the International Monetay Fund for support. Following the approach, a fact-finding delegation from the Fund arrive for discussions with the government after which it will call for
+a Debt Sustainability Analysis (DSA). The negotiations with government team is meant to
+determine the form that an economic stabilisation programme should take. It will also explore the nature of the policies reforms and programmes thai the loan support should entail. The results of the negotiations forms the basis for a staff decision on Ghana's economic support request. Our leaders in government together with policymakers plays important role in the recovery by properly engaging all the relevant stakenciders. All needs to demonstrate good faith and supports the government.`,
+`As human beings, we need sleep. Everyone, whether they will admit it or not, know how important sleep is. Despite years of study, it still remain a mystery. There is questions that quiet need many answers. One may think that high-speed internet as well as laboursaving tools contribute to make getting sleep better. Many around the world is sleeping less than the recommended eight hours. A number of people has sleep problems, with many millions who suffers from chronic sleep disorder. Among older adults, the cognitive and medical consequences of untreated sleep disorders decreases health-related quality of life, and contributes to functional limitations and loss of independence. Reducing sleep by even two hours or for some nights result in a drop of daytime alertness by as much as 32 percept. Figures from the National Highway Traffic Safety Administration shows that, each year, drowsy
+driving lead to at least 20,000 automobile crashes, and 90, 000 injuries. If we are not careful, the demands on our time can dominates us to the detriment of physical, mental, and spiritual
+health. Because problems caused by lack of sleep affects those as around us, it is high time we
+take our responsibility to getting adequate sleep and rest seriously.`,
+`Unhealthy relationships at home actually damages our health. The home, which should be shelter and a safe haven filled with warmth and love, become a place of harm, danger and fear behind closed doors. Such an unhealthy environment become a source of chronic stress, possibly resulting in disease and even death. There is evidences that abusive relationships may causes changes in our brain. Neither exposure to physical violence nor sexual and emotional
+abuses leaves their victims unharmed. Adverse childhood experiences appears to produce several physical health problems later in adulthovel. Children and adult who are victims of family violence often experiences fear, shame, guilt, and stigma. Such negative emotions that result from violence contributes to mental and emotional problems, including depression, bipolar disorder, and post-traumatic stress disorder. The good news is that positive coping factors can help people to heal. Cultivating holesome emotions in addition to learning to be flexible reduce violence at home. Supportive relationships strengthens the immune system and increases our ability to fight off illness. Studies on domestic violence around the globe suggests that both gratitude and forgiveness powerfully contributes to psychological resilience in the face of trauma and abuse.`,
+`The global community, on March 21, this year, observed World Down Syndrome Day, a day set aside by the United Nations (UN) to raise public awareness and understanding of the condition. The day also advocate the rights, inclusion and well-being of people of all races, backgrounds and ethnicity. Down Syndrome (DS), also called Trisomy 21, are a condition in which a person is born with extra chromosome. Chromosomes contains hundreds or even
+thousands of genes. Genes carry the information that determine a person's traits (features or characteristics passed on from parents to their children). With DS, the extra chromosome cause delay in the way a child develops, both mentally and physically. Statistics from the UN shows that DS affects one in every 800 births worldwide, which would mean that, in 2023, for instance, about 880 babies were born with DS in Ghana. The UN, in the general principles of the UN Convention on the Rights of Persons with Disabilities (UNCRPD), call for "full and effective participation and inclusion in society". Medically, it is said that the reason for the development of the extra copy of chromosome 21 that causes DS are unknown; however, it is
+clear that the risk of having a child with DS increase with age and is significantly increased in pregnancies in women 35 years and over. Most individuals with DS has mild or moderate IQ and intellectual disability, with some having severe IQ difficulties.`,
+`University of Cape Coast (UCC) was established in 1962 originally as a university college of education to train teachers for Ghana's second cycle institutions and colleges of education.
+Currently, UCC is one the best tertiary institutions in the world. The effort of lecturers and students have made the institution one of the topmost ranked universities globally. Because of the current academic achievements chalked by the school, people all over the wants their wards to attend UCC, which give the academic board a tough job in selecting students to pursue the various programmes undertaken by the school. The number of fresh students, admitted for 2022/2023 academic year have seen a significant increment. Andrews, is one of the students who has gained admission into the university to pursue her Master, of Philosophy in Population and Health programme. Everyone believe that the institution, has over the years proven to be a top class tertiary institution. The vice chancellor as well as the faculty members always encourage newly-admitted students to be very determined in order to excel academically. It is important to note that when it come to research and training of competent graduate, UCC is second to none.
+Nonetheless, there is various challenges faced by the school which the university management must address in order to achieve more.`,
+`This semester has been very short because of the strike action by university lecturers a few months ago. Lectures has ended so quickly one wonder why it is so. The majority are yet to come to terms with this. There is issues that needs to be addressed by the University management. A large number of lecturers was interested in the extension of the time to enable them to cover most of the topics on their course outlines. The students no less than other stakeholders in the university shares a similar opinion. Many a student think that a number of problems must be addressed. James is one of the students who complains about this problems. According to him, her mother is looking up to him obtaining deep knowledge from the university.`,
+`One headache the management of the Ghana Education Service have every year is the clamour for admission to a few senior high schools. According to the GES, out of the 721 senior high, technical and vocational schools that declares vacancies every year, over 51 per cent of the candidates seek admission to less than 100 of those schools. For instance, this year, out of the 525,000 BECE candidates who qualified for placement in senior high, vocation and technical schools, over 60 per cent of them wanted admission to schools that have been oversubscribed.
+Many a candidate believe that attending these oversubscribed schools leverage their chances of getting admission to the best tertiary institutions in the country. The Daily Graphic sees this as a serious lapse, and the irony is that there is equally undersubscribed schools that struggles to get the full complement of their numbers. This year, the situation is even worse with the abolition of the Double Track system. The seriousness of this year's placement is the fact that all schools will
+be running a single track if what the GES announced is anything to go by. The continuous insistence of parents to go any length to secure admission to those highly subscribed schools for
+their wards are problematic. That is why the Daily Graphic support and encourage the Ministry of Education to pursue the module school project in each region which is expected to raise the standard of the less endowed schools to that of the endowed ones such as the Achimotas and Wesley Girls. While urging the ministry to pursue the module school project, we believe that it is important the issue of equitable distribution of resources and school materials to all schools is
+addressed.`,
+`There are lots of facts to know about fungi. A plant without leaves, flowers or green colouring
+matter and which grow on other plants or decaying materials are called fungus. The cells of fungi are very small and possesses discrete membrane-bound nuclei. The concern of this discourse are
+to discuss the advantages and disadvantages of fungi to living organisms. A number of research has found some disadvantages of fungi. Fungi are disadvantageous to man because they destroy
+food, causes foot-rot, produce ringworm, damages industrial equipment and pollutes water.
+However, fungi are useful in fertilizing the soil and serving as source of food. Available statistics
+in most countries indicates that soil fungi make up 10 to 30 percent of soil rhizosphere.
+Furthermore. other advantages of fungi includes their industrial use for baking and brewing
+medicine and for the manufacture of organic substances.`,
+`All human interactions is conducted through language, so languages forms an important part of the society. The purpose of language is to achieve different goals in several aspects of the human life. According to Fairclough (2011), language is a medium of domination, and social force and help to legitimize relations of organized power-politicians and journalists makes crucial use of language in reaching out to the audience in order to persuade and attract their attention. It is not only politicians and journalists who takes advantage of the power rooted in language;
+participants in courtroom discourse also appeals to the power of language to argue for their course. For instance, the use of language as a persuasive tool have often been exploited by lawyers seeking to push forward a good case for their clients. Legal professionals manipulates ma language and use it as a weapon to foster and sustain unequal power relations in the courtroom.
+Similarly, language is crucial in law and that courtroom trials comprises speech events in which almost everything occur through the spoken word. Law is undoubtedly the very profession of rhetoric`,
+`For the past few years and particularly this year, there has been a number of grave concerns expressed by many Ghanaians regarding either safety conditions as well as security that prevails in the country. The migration of people in the major cities with limited chances of gainfui jobs have also increased instances of many crimes. This set of unfortunate situations in Ghana lead to the undermining of development and progress of our country if drastic measures, as a matter of fact, is not taken to address them. As a country, we have to take a second look at our security agencies, particularly the Ghana Armed Forces which more often combats criminal activities.
+The government should resource the security agencies adequately 10 enable them to fight crime`,
+`One third or a billion of the world's population love the joy and the ecstasy associated with eating candies. A good number of them, in their homes and offices, eats candies as snacks. They often associate the taste of these candies to the peace people often states in books and myths. Kwame, who lives in Accra with his friends, together with Adwoa and Kwesi, buy boxes of sweets every week for fun. It is also equally important to stress that not everyone love his candies sweet or even their lives natural. A research estimate that the number of people who love sour candies are bigger than those who love sweet candies. However, whether one prefer candies or berries or tea are purely by choice and we should respect that. The producer and founder of "lollipop" do not compel people to eat. In the same vein, neither does the manufacturer of mints, together with the consumers of these. nor the teacher and the pastor, together with their students and congregation sits in public to convince people to eat these foods. The choices are simply ours and they lie in our hands. We should try to put across that every option appear legit unless otherwise abused. There is also possibilities for the police to arrest people who produces fake products. The police should work as a unit to combat this practices and to help make foods friendly to the public.`,
+`Are lots of facts to know about fungi. A plant without leaves, flowers of green colouring
+matter and which grow on other plants or decaying materials are called fungus. The cells of fungi are very small and possesses discrete membrane-bound nuclei. The concern of this discourse are
+to discuss the advantages and,disadvantages of fungi to living organisms. A number of research has found some disadvantages of fungi. Fungi are disadvantageous to man because they destroy
+food, causes foot-rot, produce ringworm, damages industrial equipment and pollutes water.
+However, fungi are useful in fertilizing the soil and serving as source of food? Available statistics
+in most countries indicates that soil fungi make up 10 to 30 percent of soil rhizosphere.
+Furthermore. other adgantages of fungi includes their industrial use for baking and brewing
+medicine and forthe manufacture of organic substences`,
+
+`Fungi is a fascinating group of organisms. Some fungi grows in damp places, while others thrives in dry conditions. The characteristics of fungi is varied; some reproduces sexually, while others reproduce asexually. The role of fungi in ecosystems are significant. Fungi helps decompose organic materials, returning nutrients to the soil. Many species of fungi is also used in medicine, such as penicillin, which were discovered from mold. The effects of fungi on human health ranges from beneficial to harmful. Certain fungi causes allergies and infections, while others provides vitamins and supplements. A variety of research studies shows the potential applications of fungi in biotechnology and agriculture. However, the dangers posed by fungi should not be ignored as they damages crops, food storage, and equipment. Overall, understanding fungi are crucial for both science and industry.`,
+`There is several animals in the forest that lives in groups. Lions enjoys hunting together, while deer run quickly when it senses danger. The trees provides shelter for birds and squirrels. In many parts of the forest, there was rare flowers that attracts insects. The rivers flows gently but sometimes it floods. Forest rangers are trained to protect wildlife, yet sometimes they does not manage properly. There is rules to prevent poaching, but many hunters ignores them. Some animals has unique behavior, while others are common. Overall, the forest ecosystems is fragile and requires protection.`,
+
+`There is many advantages to exercise, but some people does not realize them. Regular exercise improve health, and it increases energy. Muscles are strengthened, while the heart works better. There was studies showing that exercise reduces stress. Yoga and meditation is often recommended for balance. Exercise also helps with weight management, but some individuals ignores diet. The coaches provides guidance, while some trainees follow instructions wrongly. In schools, there are programs that encourages students to participate in sports. Overall, physical activity are important for long-term wellness.`,
+`There is a lot of pollution in cities that affects humans and animals. Cars and factories produces smoke that harms air quality. Rivers and lakes are contaminated by wastes, which kills fishes. The government has laws to prevent pollution, but some companies ignores them. People also throws trash carelessly, while the street cleaners works hard to remove them. In some areas, there was campaigns to educate citizens about waste management. Plastic bags is banned in many cities, yet they are still used. The effects of pollution are serious and it damages environment. Communities should cooperate, while individuals has responsibility too. Overall, clean environment are crucial for health and safety.`,
+
+
+`There is many students in the classroom who loves science. The teacher explains lessons quickly, but some of them struggles to understand. There was several experiments that demonstrates principles of physics. The textbooks provides examples, yet some pages is missing. Students also writes notes, but some of them does not pay attention. There is rules in the lab that should be follow. The lab equipments is expensive and should be handled carefully. Overall, the students are learning, but sometimes it takes more time than expected.`,
+`There is a lot of food in the market that needs to be sold quickly. Vendors sells vegetables, fruits, and grains. Some customers prefers fresh produce, while others likes packaged items. The prices of goods is high, but some people buys anyway. There was complaints about hygiene, yet the managers does not respond. There are rules for storage, but some sellers ignores them. The market area are crowded, and it causes accidents. Overall, the market operates daily, but problems still exists.`,
+`There is many reasons why people prefers pets. Dogs enjoys playing, while cats sleeps most of the day. The owners takes care of them, yet some forgets to feed on time. There was toys and accessories that helps animals stay healthy. Some pets has unique behaviors, while others are common. The veterinarians provides medicine, but some pet owners ignores advice. Overall, pets is important for companionship, but it requires responsibility.`,
+`There is many books on the shelves that teaches history. Students enjoys reading, while some prefer stories. The teachers explains chapters quickly, but some learners struggles. There was programs that encourages reading habits. Libraries provides quiet spaces, yet some students ignores rules. Some books has illustrations, while others are text-only. Overall, reading is important, but it requires dedication.`,
+`There is many problems in the city that needs attention. Roads are broken, and street lights does not work. The traffic police manages intersections, but some drivers ignores rules. There was complaints about garbage, yet authorities does not respond. The hospitals provides services, but some patients waits too long. There are parks that encourages exercise, but some people ignores them. Overall, the city needs improvement, but it has potential.`,
+`There is many students who enjoys sports. Some of them prefers football, while others likes basketball. The coaches explains rules clearly, but some players struggles to follow. There was tournaments organized every month. The fields needs maintenance, and some equipment is broken. There are rules for practice, yet some students ignores them. The referees makes decisions, but sometimes players argues. Overall, sports are important, but it requires teamwork.`,
+`There is a lot of water in the lake, but some areas dries quickly. The fishermen catches fish daily, while birds feeds on small insects. There was boats and nets that helps collect fish. The water level is low, and some parts is polluted. There are regulations, yet some people ignores them. The guards monitors activities, but sometimes they does not act. Overall, the lake are important for the community.`,
+`There is many trees in the park that provides shade. Children enjoys playing, while adults relax on benches. The gardeners waters plants daily, but some flowers dies. There was benches and swings that needs repair. The pathways are clean, but some trash is left behind. The security guards ensures safety, but some visitors ignores rules. Overall, the park are important for recreation.`,
+`There is a lot of cars on the road that causes traffic. Drivers speeds, while pedestrians waits to cross. The traffic lights do not work properly, and some signs is missing. There was accidents yesterday that affects many people. The police monitors roads, but some drivers ignores rules. Overall, traffic are a problem in the city.`,
+`There is many shops in the market that sells clothes. Vendors offers discounts, while some items is expensive. The customers enjoys browsing, but some does not buy anything. There was stalls that needs cleaning. The market authorities ensures safety, but some sellers ignores rules. Overall, the market are busy every day.`,
+`There is many students in the library who reads books. Some of them prefers novels, while others likes textbooks. The librarians organizes shelves, but some books is misplaced. There was computers and study rooms that helps students learn. Some students has notebooks, while others are digital. The rules of silence is often ignored. Overall, the library are important for education.`,
+`There is many cars parked along the street that blocks traffic. Drivers speeds, while pedestrians waits to cross. The traffic police monitor intersections, but some drivers ignores signals. There was streetlights that do not work. Overall, the streets are dangerous.`,
+`There is many animals in the zoo that attracts visitors. Lions roars loudly, while monkeys plays in cages. The zookeepers feeds them daily, but some animals dies. There was cages and enclosures that need repair. Some animals has unique behaviors, while others are common. Overall, the zoo are important for education.`,
+`There is many flowers in the garden that blooms in spring. The gardeners waters daily, but some plants dies. Birds sings in trees, while butterflies flutters around. There was benches that needs repair. Overall, the garden are beautiful and peaceful.`,
+`There is many students in the classroom who does not pay attention. The teacher explains lessons, but some learners struggles. There was books and papers that helps in learning. Some students has questions, while others are quiet. Overall, the classroom are noisy sometimes.`,
+`There is many birds in the forest that sings beautifully. Some birds builds nests, while others hides in trees. The rangers monitors the area, but some animals does not stay safe. There was fruits and insects that feeds the animals. Some trees has large leaves, while others are small. Overall, the forest are lively and full of life.`,
+];
+
+// Expected subject-verb pairs to detect (basic concord)
+const expectedCorrections = [
+[
+  { "pattern": /There are many reasons/i, "text": "There are many reasons why people prefer online learning." },
+  { "pattern": /Students enjoy/i, "text": "Students enjoy flexibility, but some of them struggle with distractions." },
+  { "pattern": /teachers often explain/i, "text": "The teachers often explain lessons quickly, and it sometimes confuses learners." },
+  { "pattern": /There were several online platforms/i, "text": "There were several online platforms that offer free courses." },
+  { "pattern": /it lacks examples/i, "text": "The materials are useful but sometimes it lacks examples." },
+  { "pattern": /some assignments do not/i, "text": "Some assignments do not make sense." },
+  { "pattern": /study groups are/i, "text": "Study groups are important but rarely utilized." },
+  { "pattern": /Feedback from instructors is/i, "text": "Feedback from instructors is helpful for progress." },
+  { "pattern": /some learners ignore/i, "text": "Some learners ignore them." },
+  { "pattern": /online learning has/i, "text": "Overall, online learning has advantages and disadvantages." }
+],
+  [
+    { pattern:/increase in global temperatures has/i, text:"The recent increase in global temperatures has alarmed scientists." },
+    { pattern:/many believe/i, text:"Many believe that climate change is primarily caused by human activities." },
+    { pattern:/climate change is/i, text:"Climate change is primarily caused by human activities." },
+    { pattern:/not everyone agrees/i, text:"Not everyone agrees with this view." },
+    { pattern:/phenomena also contribute/i, text:"Natural phenomena also contribute significantly to these changes." },
+    { pattern:/researchers conducted/i, text:"Researchers conducted an experiment last year." },
+    { pattern:/they discovered/i, text:"They discovered that glaciers were melting rapidly." },
+    { pattern:/governments continue/i, text:"Many governments continue to ignore warnings." },
+    { pattern:/authorities insist/i, text:"Authorities insist that enough measures have been taken." },
+    { pattern:/students adopt/i, text:"Few students adopt these habits consistently." },
+    { pattern:/tackling climate change requires/i, text:"Tackling climate change requires collective effort." },
+    { pattern:/hope still exists/i, text:"Hope still exists for a sustainable future." }
+  ],
+  [
+    { pattern:/global economy is experiencing/i, text:"The global economy is experiencing the deepest downturn in the post-World War II period." },
+    { pattern:/large number of advanced economies/i, text:"A large number of advanced economies have fallen into recession." },
+    { pattern:/economies in the rest of the world/i, text:"Economies in the rest of the world have slowed abruptly." },
+    { pattern:/global trade and financial flows/i, text:"Global trade and financial flows are shrinking." },
+    { pattern:/output and employment losses/i, text:"Output and employment losses are mounting." },
+    { pattern:/credit market and borrowers/i, text:"The credit market and borrowers remain frozen." },
+    { pattern:/banks that were once vibrant/i, text:"Banks that were once vibrant now struggle to keep their financial health." },
+    { pattern:/ghana has not been spared/i, text:"Ghana has not been spared the economic headwinds." },
+    { pattern:/figures published recently/i, text:"Figures published recently show that Ghana's debt is huge." },
+    { pattern:/government therefore has to approach/i, text:"The government therefore has to approach the International Monetary Fund for support." },
+    { pattern:/fact-finding delegation/i, text:"A fact-finding delegation from the Fund has arrived for discussions." },
+    { pattern:/negotiations with the government team/i, text:"The negotiations with the government team are meant to determine the form of an economic stabilisation programme." },
+    { pattern:/explore the nature of the policies/i, text:"It will also explore the nature of the policies, reforms, and programmes that the loan support should entail." },
+    { pattern:/results of the negotiations/i, text:"The results of the negotiations form the basis for a staff decision on Ghana's economic support request." },
+    { pattern:/leaders in government/i, text:"Our leaders in government, together with policymakers, play an important role in the recovery." },
+    { pattern:/all need to demonstrate/i, text:"All need to demonstrate good faith and support the government." }
+  ],
+  [
+  { pattern:/committee, along with its advisors/i, text:"The committee, along with its advisors, was unsure about the next course of action." },
+  { pattern:/each of the members/i, text:"Each of the members has their own opinion on how the issue should be resolved." },
+  { pattern:/results of the experiments/i, text:"The results of the experiments, which were conducted in different laboratories, show inconsistencies that are difficult to explain." },
+  { pattern:/number of students applying for scholarships/i, text:"The number of students applying for scholarships has increased, but the criteria for selection remain unclear." },
+  { pattern:/president, as well as the board of directors/i, text:"The president, as well as the board of directors, was present at the meeting." },
+  { pattern:/neither of the solutions/i, text:"Neither of the solutions is entirely satisfactory, and every possible outcome requires careful consideration." },
+  { pattern:/significant gap between what the policymakers promise/i, text:"There is a significant gap between what the policymakers promise and what the government delivers." },
+  { pattern:/data collected from the various studies/i, text:"The data collected from the various studies suggest that the new policy may not be effective, but the evidence does not fully support this conclusion." },
+  { pattern:/series of unfortunate events/i, text:"A series of unfortunate events has led to the project's delay, but neither the supervisor nor the employees were taking full responsibility." },
+  { pattern:/faculty, which includes both experienced and new lecturers/i, text:"The faculty, which includes both experienced and new lecturers, was discussing the revised curriculum." },
+  { pattern:/many a researcher/i, text:"Many a researcher has struggled with the complexity of these findings, and no one, not even the experts, knows the ultimate solution." },
+  { pattern:/jury, despite their differing opinions/i, text:"The jury, despite their differing opinions, was expected to reach a unanimous verdict." },
+  { pattern:/rise in unemployment rates/i, text:"The rise in unemployment rates, coupled with the increase in inflation, makes economic recovery a challenge." },
+  { pattern:/list of recommended books/i, text:"The list of recommended books, along with the required readings, is available at the library." }
+],
+[
+  { pattern:/recent increase in global temperatures/i, text:"The recent increase in global temperatures has alarmed scientists and environmentalists alike." },
+  { pattern:/climate change is primarily caused by human activities/i, text:"Many believe that climate change is primarily caused by human activities such as deforestation and burning fossil fuels." },
+  { pattern:/not everyone agrees with this view/i, text:"However, not everyone agrees with this view." },
+  { pattern:/natural phenomena also contribute/i, text:"Some individuals argue that natural phenomena also contribute significantly to these changes." },
+  { pattern:/group of researchers conducted an experiment/i, text:"A group of researchers conducted an experiment last year to study the impact of greenhouse gases on polar ice caps." },
+  { pattern:/melting glaciers were occurring/i, text:"They discovered that melting glaciers were occurring at a faster rate than previously recorded." },
+  { pattern:/governments continue to ignore warnings/i, text:"Despite their findings, many governments continue to ignore warnings about the dangers posed by rising sea levels." },
+  { pattern:/communities face severe flooding/i, text:"In some regions, communities face severe flooding during rainy seasons due to inadequate infrastructure planning." },
+  { pattern:/authorities insist that enough measures/i, text:"Yet, authorities insist that enough measures have been taken to prevent disasters." },
+  { pattern:/renewable energy sources like solar panels/i, text:"Interestingly, renewable energy sources like solar panels and wind turbines provide sustainable solutions to combat climate change." },
+  { pattern:/adoption rates remain low/i, text:"But adoption rates remain low because of high initial costs." },
+  { pattern:/family living in rural areas/i, text:"For example, a family living in rural areas might find it difficult to afford installing solar systems without government subsidies." },
+  { pattern:/misinformation spreads rapidly online/i, text:"Furthermore, misinformation spreads rapidly online discouraging people from embracing eco-friendly practices." },
+  { pattern:/education plays a crucial role/i, text:"Education plays a crucial role in addressing misconceptions regarding climate change." },
+  { pattern:/schools across the world teach students/i, text:"Schools across the world teach students about environmental conservation, but results vary widely depending on resources available." },
+  { pattern:/teachers emphasize the importance/i, text:"Teachers emphasize the importance of reducing waste, reusing materials, and recycling whenever possible." },
+  { pattern:/few students adopt these habits/i, text:"Unfortunately, few students adopt these habits consistently outside the classroom." },
+  { pattern:/tackling climate change requires collective effort/i, text:"Tackling climate change requires collective effort from individuals, organizations, and governments worldwide." },
+  { pattern:/hope still exists for creating a more sustainable future/i, text:"While progress seems slow, hope still exists for creating a more sustainable future if action is prioritized immediately." }
+],
+[
+  { pattern:/grave concerns expressed by many ghanaians/i, text:"For the past few years and particularly this year, there have been a number of grave concerns expressed by many Ghanaians regarding safety conditions as well as security that prevail in the country." },
+  { pattern:/migration of people to the major cities/i, text:"The migration of people to the major cities with limited chances of gainful jobs has also increased instances of many crimes." },
+  { pattern:/statistics show that a great deal of people/i, text:"Statistics show that a great deal of people decide to move to the urban areas not only to seek greener pastures, but to engage in these unpleasant activities." },
+  { pattern:/undermining of development and progress/i, text:"This set of unfortunate situations in Ghana leads to the undermining of development and progress for our country." },
+  { pattern:/drastic measures.*need to be taken/i, text:"Drastic measures, as a matter of fact, need to be taken to address them." },
+  { pattern:/combined security agencies/i, text:"As a country, we have to take a second look at our combined security agencies, particularly the Ghana Armed Forces which, more often, combat criminal activities." },
+  { pattern:/police need to sit up and work/i, text:"The police need to sit up and work for the betterment of the country." },
+  { pattern:/government should resource the security agencies/i, text:"The government should resource the security agencies adequately to enable them to fight crime effectively." },
+  { pattern:/primary responsibility of the state/i, text:"It is the primary responsibility of the state to ensure the security of either the strong or the weak who live in the country." },
+  { pattern:/good security.*promotes peace/i, text:"We need to understand that good security in conjunction with safety mechanisms promotes peace and socio-economic development." },
+  { pattern:/public to report/i, text:"It is incumbent on the public to report any litany of activities that pose a threat to national security." },
+  { pattern:/situation gets out of hand/i, text:"If we do not solve these problems, the majority of the people are going to be blamed when the situation gets out of hand." }
+],
+[
+  { pattern:/rate at which energy is received from the sun/i, text:"On the broadest scale, the rate at which energy is received from the sun and the rate at which it is lost to space determine the equilibrium temperature and climate of Earth." },
+  { pattern:/energy is distributed around the globe/i, text:"This energy is distributed around the globe by winds, ocean currents, and other mechanisms to affect the climates of different regions." },
+  { pattern:/factors that shape climate/i, text:"Factors that shape climate are called climate forcings or \"forcing mechanisms\"." },
+  { pattern:/variations in solar radiation/i, text:"These include processes such as variations in solar radiation, variations in the Earth's orbit, mountain-building and continental drift as well as changes in greenhouse gas concentrations." },
+  { pattern:/variety of climate change feedbacks/i, text:"There are a variety of climate change feedbacks that amplify or diminish the initial forcing." },
+  { pattern:/oceans and ice caps respond slowly/i, text:"Some parts of the climate system such as the oceans and ice caps respond slowly in reaction to climate forcings whereas others respond more quickly." },
+  { pattern:/forcing mechanisms can be either/i, text:"Forcing mechanisms can be either \"internal\" or \"external\"." },
+  { pattern:/internal forcing mechanisms are natural processes/i, text:"Internal forcing mechanisms are natural processes within the climate system itself." },
+  { pattern:/external forcing mechanisms can be either natural/i, text:"On the other hand, external forcing mechanisms can be either natural (e.g. changes in solar output) or anthropogenic." },
+  { pattern:/response of the climate system might be fast/i, text:"Whether the initial forcing mechanisms are internal or external, the response of the climate system might be fast, slow, or a combination of both." },
+  { pattern:/climate system can respond abruptly/i, text:"Therefore, the climate system can respond abruptly, but the full response to forcing mechanisms might not be fully developed for centuries or even longer." }
+],
+[
+  { pattern:/nations in the western world/i, text:"The nations in the western world where class struggle was often sublimated by high wages and decent social welfare provision maintain a relatively stable system only because of historic shifts away from unfettered capitalism." },
+  { pattern:/such social institutions are aberrations/i, text:"But such social institutions are aberrations, the result of class struggle or a historic alignment of political and economic factors." },
+  { pattern:/underlying accumulation of capital/i, text:"Either way, the underlying accumulation of capital always reasserts the primacy of capitalist decline in the end." },
+  { pattern:/notions of capitalism/i, text:"Before we discuss the notions of capitalism, including the laws and tendencies, there are also trends and cycles which expose the rhythm of capitalist profits to be discussed." },
+  { pattern:/internal dynamics of capitalism/i, text:"Because of the internal dynamics of capitalism, there is an inherent tendency towards breakdown - this is known as the business cycle or boom and bust as some people like to call it." },
+  { pattern:/how crises develop under capitalism/i, text:"So what is something specific about how crises develop under capitalism and how they disrupt the apparent equilibrium of the system?" },
+  { pattern:/Communist Manifesto/i, text:"A passage in the Communist Manifesto indicates the beginnings of Marx's theory of capitalist crisis." },
+  { pattern:/society suddenly finds itself/i, text:"He writes, \"In these crises, ... Society suddenly finds itself put back into a state of momentary barbarism; it appears as if a famine, a universal war of devastation, had cut off the supply of every means of subsistence; industry and commerce seem to be destroyed; and why?\"" },
+  { pattern:/too much civilization/i, text:"Marx explains that it is because there is \"too much civilization, too much means of subsistence, too much industry, too much commerce.\"" }
+],
+[
+  { pattern:/global economy is experiencing/i, text:"The global economy is experiencing the deepest downtown in the post-World War II, as the financial crisis rapidly spread around the world." },
+  { pattern:/large number of advanced economies/i, text:"A large number of advanced economies has fallen into recession and economies in the rest of the world has slowed abruptly." },
+  { pattern:/global trade and financial flows/i, text:"Global trade and financial flows is shrinking while output and employment losses mounts." },
+  { pattern:/credit market as well as borrowers/i, text:"The Credit market as well as borrowers remain frozen and banks that was once vibrant now struggles to keep their financial health." },
+  { pattern:/ghana has not been spared/i, text:"Ghana has not been spared the economic headwinds." },
+  { pattern:/figures published recently/i, text:"Figures published recently shows that Ghana's debt is huge." },
+  { pattern:/approach the international monetay fund/i, text:"The government therefore have to approach the International Monetay Fund for support." },
+  { pattern:/fact-finding delegation from the fund/i, text:"Following the approach, a fact-finding delegation from the Fund arrive for discussions with the government after which it will call for a Debt Sustainability Analysis (DSA)." },
+  { pattern:/negotiations with government team/i, text:"The negotiations with government team is meant to determine the form that an economic stabilisation programme should take." },
+  { pattern:/explore the nature of the policies/i, text:"It will also explore the nature of the policies reforms and programmes thai the loan support should entail." },
+  { pattern:/results of the negotiations/i, text:"The results of the negotiations forms the basis for a staff decision on Ghana's economic support request." },
+  { pattern:/leaders in government together with policymakers/i, text:"Our leaders in government together with policymakers plays important role in the recovery by properly engaging all the relevant stakenciders." },
+  { pattern:/demonstrate good faith/i, text:"All needs to demonstrate good faith and supports the government." }
+],
+[
+  { pattern:/we need sleep/i, text:"As human beings, we need sleep. Everyone, whether they will admit it or not, knows how important sleep is." },
+  { pattern:/despite years of study/i, text:"Despite years of study, it still remains a mystery." },
+  { pattern:/questions that quite need many answers/i, text:"There are questions that quite need many answers." },
+  { pattern:/high-speed internet as well as laboursaving tools/i, text:"One may think that high-speed internet as well as laboursaving tools contribute to making getting sleep better." },
+  { pattern:/sleeping less than the recommended eight hours/i, text:"Many around the world are sleeping less than the recommended eight hours." },
+  { pattern:/number of people have sleep problems/i, text:"A number of people have sleep problems, with many millions who suffer from chronic sleep disorder." },
+  { pattern:/among older adults/i, text:"Among older adults, the cognitive and medical consequences of untreated sleep disorders decrease health-related quality of life, and contribute to functional limitations and loss of independence." },
+  { pattern:/reducing sleep by even two hours/i, text:"Reducing sleep by even two hours or for some nights results in a drop of daytime alertness by as much as 32 percent." },
+  { pattern:/national highway traffic safety administration/i, text:"Figures from the National Highway Traffic Safety Administration show that, each year, drowsy driving leads to at least 20,000 automobile crashes, and 90,000 injuries." },
+  { pattern:/demands on our time can dominate us/i, text:"If we are not careful, the demands on our time can dominate us to the detriment of physical, mental, and spiritual health." },
+  { pattern:/take our responsibility/i, text:"Because problems caused by lack of sleep affect those around us, it is high time we take our responsibility to getting adequate sleep and rest seriously." }
+],
+[
+  { pattern:/unhealthy relationships at home/i, text:"Unhealthy relationships at home actually damage our health." },
+  { pattern:/home, which should be a shelter/i, text:"The home, which should be a shelter and a safe haven filled with warmth and love, becomes a place of harm, danger and fear behind closed doors." },
+  { pattern:/unhealthy environment becomes a source of chronic stress/i, text:"Such an unhealthy environment becomes a source of chronic stress, possibly resulting in disease and even death." },
+  { pattern:/abusive relationships may cause changes/i, text:"There is evidence that abusive relationships may cause changes in our brain." },
+  { pattern:/neither exposure to physical violence/i, text:"Neither exposure to physical violence nor sexual and emotional abuse leaves their victims unharmed." },
+  { pattern:/adverse childhood experiences/i, text:"Adverse childhood experiences appear to produce several physical health problems later in adulthood." },
+  { pattern:/victims of family violence often experience/i, text:"Children and adults who are victims of family violence often experience fear, shame, guilt, and stigma." },
+  { pattern:/negative emotions that result from violence/i, text:"Such negative emotions that result from violence contribute to mental and emotional problems, including depression, bipolar disorder, and post-traumatic stress disorder." },
+  { pattern:/good news is that positive coping factors/i, text:"The good news is that positive coping factors can help people to heal." },
+  { pattern:/cultivating wholesome emotions/i, text:"Cultivating wholesome emotions in addition to learning to be flexible reduces violence at home." },
+  { pattern:/supportive relationships strengthen the immune system/i, text:"Supportive relationships strengthen the immune system and increase our ability to fight off illness." },
+  { pattern:/gratitude and forgiveness powerfully contribute/i, text:"Studies on domestic violence around the globe suggest that both gratitude and forgiveness powerfully contribute to psychological resilience in the face of trauma and abuse." }
+],
+[
+  { pattern:/world down syndrome day/i, text:"The global community, on March 21, this year, observed World Down Syndrome Day, a day set aside by the United Nations (UN) to raise public awareness and understanding of the condition." },
+  { pattern:/advocates the rights, inclusion and well-being/i, text:"The day also advocates the rights, inclusion and well-being of people of all races, backgrounds and ethnicities." },
+  { pattern:/down syndrome.*trisomy 21/i, text:"Down Syndrome (DS), also called Trisomy 21, is a condition in which a person is born with an extra chromosome." },
+  { pattern:/chromosomes contain hundreds/i, text:"Chromosomes contain hundreds or even thousands of genes." },
+  { pattern:/genes carry the information/i, text:"Genes carry the information that determines a person's traits (features or characteristics passed on from parents to their children)." },
+  { pattern:/extra chromosome causes delay/i, text:"With DS, the extra chromosome causes delay in the way a child develops, both mentally and physically." },
+  { pattern:/statistics from the un show/i, text:"Statistics from the UN show that DS affects one in every 800 births worldwide, which would mean that, in 2023, for instance, about 880 babies were born with DS in Ghana." },
+  { pattern:/un convention on the rights of persons with disabilities/i, text:"The UN, in the general principles of the UN Convention on the Rights of Persons with Disabilities (UNCRPD), calls for \"full and effective participation and inclusion in society\"." },
+  { pattern:/reasons for the development of the extra copy/i, text:"Medically, it is said that the reasons for the development of the extra copy of chromosome 21 that causes DS are unknown; however, it is clear that the risk of having a child with DS increases with age and is significantly increased in pregnancies in women 35 years and over." },
+  { pattern:/most individuals with ds have mild or moderate iq/i, text:"Most individuals with DS have mild or moderate IQ and intellectual disability, with some having severe IQ difficulties." }
+],
+[
+  { pattern:/university of cape coast.*established in 1962/i, text:"University of Cape Coast (UCC) was established in 1962 originally as a university college of education to train teachers for Ghana's second cycle institutions and colleges of education." },
+  { pattern:/ucc is one of the best tertiary institutions/i, text:"Currently, UCC is one of the best tertiary institutions in the world." },
+  { pattern:/efforts of lecturers and students/i, text:"The efforts of lecturers and students have made the institution one of the topmost ranked universities globally." },
+  { pattern:/current academic achievements/i, text:"Because of the current academic achievements chalked by the school, people all over the world want their wards to attend UCC, which gives the academic board a tough job in selecting students to pursue the various programmes undertaken by the school." },
+  { pattern:/number of fresh students admitted/i, text:"The number of fresh students admitted for 2022/2023 academic year has seen a significant increment." },
+  { pattern:/andrews is one of the students/i, text:"Andrews is one of the students who has gained admission into the university to pursue her Master of Philosophy in Population and Health programme." },
+  { pattern:/institution has over the years proven/i, text:"Everyone believes that the institution has over the years proven to be a top class tertiary institution." },
+  { pattern:/vice chancellor as well as the faculty members/i, text:"The vice chancellor as well as the faculty members always encourage newly-admitted students to be very determined in order to excel academically." },
+  { pattern:/research and training of competent graduates/i, text:"It is important to note that when it comes to research and training of competent graduates, UCC is second to none." },
+  { pattern:/various challenges faced by the school/i, text:"Nonetheless, there are various challenges faced by the school which the university management must address in order to achieve more." }
+],
+[
+  { pattern:/semester has been very short/i, text:"This semester has been very short because of the strike action by university lecturers a few months ago." },
+  { pattern:/lectures have ended so quickly/i, text:"Lectures have ended so quickly; one wonders why it is so." },
+  { pattern:/majority are yet to come to terms/i, text:"The majority are yet to come to terms with this." },
+  { pattern:/issues that need to be addressed/i, text:"There are issues that need to be addressed by the University management." },
+  { pattern:/large number of lecturers were interested/i, text:"A large number of lecturers were interested in the extension of the time to enable them to cover most of the topics on their course outlines." },
+  { pattern:/students.*share a similar opinion/i, text:"The students, no less than other stakeholders in the university, share a similar opinion." },
+  { pattern:/many a student thinks/i, text:"Many a student thinks that a number of problems must be addressed." },
+  { pattern:/james is one of the students/i, text:"James is one of the students who complain about these problems." },
+  { pattern:/mother is looking up to him/i, text:"According to him, his mother is looking up to him obtaining deep knowledge from the university." }
+],
+[
+  { pattern:/clamour for admission to a few senior high schools/i, text:"One headache the management of the Ghana Education Service has every year is the clamour for admission to a few senior high schools." },
+  { pattern:/out of the 721 senior high/i, text:"According to the GES, out of the 721 senior high, technical and vocational schools that declare vacancies every year, over 51 per cent of the candidates seek admission to less than 100 of those schools." },
+  { pattern:/525,000 bece candidates/i, text:"For instance, this year, out of the 525,000 BECE candidates who qualified for placement in senior high, vocational and technical schools, over 60 per cent of them wanted admission to schools that have been oversubscribed." },
+  { pattern:/many a candidate believes/i, text:"Many a candidate believes that attending these oversubscribed schools leverages their chances of getting admission to the best tertiary institutions in the country." },
+  { pattern:/daily graphic sees this as a serious lapse/i, text:"The Daily Graphic sees this as a serious lapse, and the irony is that there are equally undersubscribed schools that struggle to get the full complement of their numbers." },
+  { pattern:/abolition of the double track system/i, text:"This year, the situation is even worse with the abolition of the Double Track system." },
+  { pattern:/all schools will be running a single track/i, text:"The seriousness of this year's placement is the fact that all schools will be running a single track if what the GES announced is anything to go by." },
+  { pattern:/continuous insistence of parents/i, text:"The continuous insistence of parents to go to any length to secure admission to those highly subscribed schools for their wards is problematic." },
+  { pattern:/model school project in each region/i, text:"That is why the Daily Graphic supports and encourages the Ministry of Education to pursue the model school project in each region which is expected to raise the standard of the less endowed schools to that of the endowed ones such as the Achimotas and Wesley Girls." },
+  { pattern:/equitable distribution of resources/i, text:"While urging the ministry to pursue the model school project, we believe that it is important that the issue of equitable distribution of resources and school materials to all schools is addressed." }
+],
+[
+  { pattern:/facts to know about fungi/i, text:"Here are lots of facts to know about fungi." },
+  { pattern:/plant without leaves, flowers or green colouring matter/i, text:"A plant without leaves, flowers or green colouring matter and which grows on other plants or decaying materials is called a fungus." },
+  { pattern:/advantages and disadvantages of fungi/i, text:"To discuss the advantages and disadvantages of fungi to living organisms." },
+  { pattern:/number of research has found/i, text:"A number of research has found some disadvantages of fungi." },
+  { pattern:/fungi are disadvantageous to man/i, text:"Fungi are disadvantageous to man because they destroy food, cause foot-rot, produce ringworm, damage industrial equipment and pollute water." },
+  { pattern:/fungi are useful in fertilizing the soil/i, text:"However, fungi are useful in fertilizing the soil and serving as a source of food." },
+  { pattern:/soil fungi make up/i, text:"Available statistics in most countries indicate that soil fungi make up 10 to 30 percent of soil rhizosphere." },
+  { pattern:/industrial use for baking and brewing/i, text:"Furthermore, other advantages of fungi include their industrial use for baking and brewing medicine and for the manufacture of organic substances." }
+],
+[
+  { pattern:/human interactions are conducted through language/i, text:"All human interactions are conducted through language, so languages form an important part of society." },
+  { pattern:/purpose of language is to achieve different goals/i, text:"The purpose of language is to achieve different goals in several aspects of human life." },
+  { pattern:/according to fairclough/i, text:"According to Fairclough (2011), language is a medium of domination, and social force and helps to legitimize relations of organized power-politicians and journalists make crucial use of language in reaching out to the audience in order to persuade and attract their attention." },
+  { pattern:/not only politicians and journalists/i, text:"It is not only politicians and journalists who take advantage of the power rooted in language; participants in courtroom discourse also appeal to the power of language to argue for their cause." },
+  { pattern:/use of language as a persuasive tool/i, text:"For instance, the use of language as a persuasive tool has often been exploited by lawyers seeking to push forward a good case for their clients." },
+  { pattern:/legal professionals manipulate language/i, text:"Legal professionals manipulate language and use it as a weapon to foster and sustain unequal power relations in the courtroom." },
+  { pattern:/language is crucial in law/i, text:"Similarly, language is crucial in law and that courtroom trials comprise speech events in which almost everything occurs through the spoken word." },
+  { pattern:/profession of rhetoric/i, text:"Law is undoubtedly the very profession of rhetoric." }
+],
+[
+  { pattern:/grave concerns expressed by many ghanaians/i, text:"For the past few years and particularly this year, there have been a number of grave concerns expressed by many Ghanaians regarding either safety conditions or security that prevails in the country." },
+  { pattern:/migration of people to the major cities/i, text:"The migration of people to the major cities with limited chances of gainful jobs has also increased instances of many crimes." },
+  { pattern:/undermining of development and progress/i, text:"This set of unfortunate situations in Ghana leads to the undermining of development and progress of our country if drastic measures, as a matter of fact, are not taken to address them." },
+  { pattern:/security agencies, particularly the ghana armed forces/i, text:"As a country, we have to take a second look at our security agencies, particularly the Ghana Armed Forces which more often combat criminal activities." },
+  { pattern:/government should resource the security agencies/i, text:"The government should resource the security agencies adequately to enable them to fight crime." }
+],
+[
+  { pattern:/world's population loves the joy/i, text:"A third of the world's population loves the joy and the ecstasy associated with eating candies." },
+  { pattern:/eat candies as snacks/i, text:"A good number of them, in their homes and offices, eat candies as snacks." },
+  { pattern:/associate the taste of these candies/i, text:"They often associate the taste of these candies with the peace people often state in books and myths." },
+  { pattern:/kwame, who lives in accra/i, text:"Kwame, who lives in Accra with his friends, together with Adwoa and Kwesi, buy boxes of sweets every week for fun." },
+  { pattern:/not everyone loves candies/i, text:"It is also equally important to stress that not everyone loves candies sweet or even their lives naturally." },
+  { pattern:/research estimates that the number of people/i, text:"Research estimates that the number of people who love sour candies is bigger than those who love sweet candies." },
+  { pattern:/whether one prefers candies or berries/i, text:"However, whether one prefers candies or berries or tea is purely by choice and we should respect that." },
+  { pattern:/producer and founder of "lollipop"/i, text:"The producer and founder of \"lollipop\" do not compel people to eat." },
+  { pattern:/neither does the manufacturer of mints/i, text:"In the same vein, neither does the manufacturer of mints, together with the consumers of these, nor the teacher and the pastor, together with their students and congregation sit in public to convince people to eat these foods." },
+  { pattern:/choices are simply ours/i, text:"The choices are simply ours and they lie in our hands." },
+  { pattern:/every option appears legit/i, text:"We should try to put across that every option appears legit unless otherwise abused." },
+  { pattern:/police to arrest people who produce fake products/i, text:"There are also possibilities for the police to arrest people who produce fake products." },
+  { pattern:/police should work as a unit/i, text:"The police should work as a unit to combat these practices and to help make foods friendly to the public." }
+],
+[
+  { pattern:/facts to know about fungi/i, text:"There are lots of facts to know about fungi." },
+  { pattern:/plant without leaves, flowers or green colouring matter/i, text:"A plant without leaves, flowers or green colouring matter and which grows on other plants or decaying materials is called a fungus." },
+  { pattern:/cells of fungi are very small/i, text:"The cells of fungi are very small and possess discrete membrane-bound nuclei." },
+  { pattern:/advantages and disadvantages of fungi/i, text:"The concern of this discourse is to discuss the advantages and disadvantages of fungi to living organisms." },
+  { pattern:/number of research has found/i, text:"A number of research has found some disadvantages of fungi." },
+  { pattern:/fungi are disadvantageous to man/i, text:"Fungi are disadvantageous to man because they destroy food, cause foot-rot, produce ringworm, damage industrial equipment and pollute water." },
+  { pattern:/fungi are useful in fertilizing the soil/i, text:"However, fungi are useful in fertilizing the soil and serving as a source of food." },
+  { pattern:/soil fungi make up 10 to 30 percent/i, text:"Available statistics in most countries indicate that soil fungi make up 10 to 30 percent of soil rhizosphere." },
+  { pattern:/industrial use for baking and brewing/i, text:"Furthermore, other advantages of fungi include their industrial use for baking and brewing medicine and for the manufacture of organic substances." }
+],
+[
+  { pattern: /some fungi grows/i, "text": "Some fungi grow in damp places, while others thrive in dry conditions." },
+  { pattern: /characteristics of fungi are varied/i, "text": "The characteristics of fungi are varied; some reproduce sexually, while others reproduce asexually." },
+  { pattern: /role of fungi in ecosystems are significant/i, "text": "The role of fungi in ecosystems is significant." },
+  { pattern: /fungi helps decompose/i, "text": "Fungi help decompose organic materials, returning nutrients to the soil." },
+  { pattern: /effects of fungi on human health ranges/i, "text": "The effects of fungi on human health range from beneficial to harmful." },
+  { pattern: /certain fungi causes/i, "text": "Certain fungi cause allergies and infections, while others provide vitamins and supplements." },
+  { pattern: /variety of research studies shows/i, "text": "A variety of research studies show the potential applications of fungi in biotechnology and agriculture." },
+  { pattern: /dangers posed by fungi should not be ignored/i, "text": "However, the dangers posed by fungi should not be ignored as they damage crops, food storage, and equipment." },
+  { pattern: /understanding fungi are crucial/i, "text": "Overall, understanding fungi is crucial for both science and industry." }
+],
+[
+  { "pattern": /There are several animals/i, "text": "There are several animals in the forest that live in groups." },
+  { "pattern": /Lions enjoy/i, "text": "Lions enjoy hunting together, while deer run quickly when they sense danger." },
+  { "pattern": /trees provide/i, "text": "The trees provide shelter for birds and squirrels." },
+  { "pattern": /there were rare flowers/i, "text": "In many parts of the forest, there were rare flowers that attract insects." },
+  { "pattern": /rivers flow/i, "text": "The rivers flow gently but sometimes they flood." },
+  { "pattern": /they do not manage/i, "text": "Forest rangers are trained to protect wildlife, yet sometimes they do not manage properly." },
+  { "pattern": /there are rules/i, "text": "There are rules to prevent poaching, but many hunters ignore them." },
+  { "pattern": /some animals have/i, "text": "Some animals have unique behavior, while others are common." },
+  { "pattern": /forest ecosystem is/i, "text": "Overall, the forest ecosystem is fragile and requires protection." },
+  { "pattern": /deer run quickly when they sense/i, "text": "Deer run quickly when they sense danger." }
+],
+[
+  { "pattern": /There are many advantages/i, "text": "There are many advantages to exercise, but some people do not realize them." },
+  { "pattern": /some people do not/i, "text": "Some people do not realize them." },
+  { "pattern": /exercise improves/i, "text": "Regular exercise improves health, and it increases energy." },
+  { "pattern": /there were studies/i, "text": "There were studies showing that exercise reduces stress." },
+  { "pattern": /Yoga and meditation are/i, "text": "Yoga and meditation are often recommended for balance." },
+  { "pattern": /some individuals ignore/i, "text": "Some individuals ignore diet." },
+  { "pattern": /coaches provide/i, "text": "The coaches provide guidance, while some trainees follow instructions wrongly." },
+  { "pattern": /programs that encourage/i, "text": "In schools, there are programs that encourage students to participate in sports." },
+  { "pattern": /physical activity is/i, "text": "Overall, physical activity is important for long-term wellness." },
+  { "pattern": /muscles are strengthened, while the heart works better/i, "text": "Muscles are strengthened, while the heart works better." }
+],
+[
+  { "pattern": /There is a lot of pollution/i, "text": "There is a lot of pollution in cities that affects humans and animals." },
+  { "pattern": /Cars and factories produce/i, "text": "Cars and factories produce smoke that harms air quality." },
+  { "pattern": /Rivers and lakes are contaminated/i, "text": "Rivers and lakes are contaminated by waste, which kills fish." },
+  { "pattern": /some companies ignore/i, "text": "Some companies ignore them." },
+  { "pattern": /People also throw/i, "text": "People also throw trash carelessly, while the street cleaners work hard to remove them." },
+  { "pattern": /there were campaigns/i, "text": "In some areas, there were campaigns to educate citizens about waste management." },
+  { "pattern": /Plastic bags are banned/i, "text": "Plastic bags are banned in many cities, yet they are still used." },
+  { "pattern": /it damages the environment/i, "text": "The effects of pollution are serious and they damage the environment." },
+  { "pattern": /individuals have/i, "text": "Communities should cooperate, while individuals have responsibility too." },
+  { "pattern": /clean environment is/i, "text": "Overall, a clean environment is crucial for health and safety." }
+],
+[
+  { "pattern": /There are many students/i, "text": "There are many students in the classroom who love science." },
+  { "pattern": /some of them struggle/i, "text": "Some of them struggle to understand." },
+  { "pattern": /there were several experiments/i, "text": "There were several experiments that demonstrate principles of physics." },
+  { "pattern": /textbooks provide/i, "text": "The textbooks provide examples, yet some pages are missing." },
+  { "pattern": /some of them do not/i, "text": "Some of them do not pay attention." },
+  { "pattern": /rules in the lab that should be followed/i, "text": "There are rules in the lab that should be followed." },
+  { "pattern": /lab equipments are/i, "text": "The lab equipment is expensive and should be handled carefully." },
+  { "pattern": /students are learning/i, "text": "Overall, the students are learning." },
+  { "pattern": /teacher explains/i, "text": "The teacher explains lessons quickly." },
+  { "pattern": /takes more time than expected/i, "text": "Sometimes it takes more time than expected." }
+],
+[
+  { "pattern": /There is a lot of food/i, "text": "There is a lot of food in the market that needs to be sold quickly." },
+  { "pattern": /Vendors sell/i, "text": "Vendors sell vegetables, fruits, and grains." },
+  { "pattern": /some customers prefer/i, "text": "Some customers prefer fresh produce, while others like packaged items." },
+  { "pattern": /prices of goods are/i, "text": "The prices of goods are high, but some people buy anyway." },
+  { "pattern": /there were complaints/i, "text": "There were complaints about hygiene, yet the managers do not respond." },
+  { "pattern": /some sellers ignore/i, "text": "There are rules for storage, but some sellers ignore them." },
+  { "pattern": /market area is/i, "text": "The market area is crowded, and it causes accidents." },
+  { "pattern": /market operates/i, "text": "Overall, the market operates daily." },
+  { "pattern": /problems still exist/i, "text": "But problems still exist." },
+  { "pattern": /customers like/i, "text": "Others like packaged items." }
+],
+[
+  { "pattern": /There are many reasons/i, "text": "There are many reasons why people prefer pets." },
+  { "pattern": /Dogs enjoy/i, "text": "Dogs enjoy playing, while cats sleep most of the day." },
+  { "pattern": /owners take/i, "text": "The owners take care of them, yet some forget to feed on time." },
+  { "pattern": /there were toys/i, "text": "There were toys and accessories that help animals stay healthy." },
+  { "pattern": /some pets have/i, "text": "Some pets have unique behaviors, while others are common." },
+  { "pattern": /veterinarians provide/i, "text": "The veterinarians provide medicine, but some pet owners ignore advice." },
+  { "pattern": /pets are important/i, "text": "Overall, pets are important for companionship." },
+  { "pattern": /requires responsibility/i, "text": "But it requires responsibility." },
+  { "pattern": /cats sleep/i, "text": "Cats sleep most of the day." },
+  { "pattern": /some forget/i, "text": "Yet some forget to feed on time." }
+],
+[
+  { "pattern": /There are many books/i, "text": "There are many books on the shelves that teach history." },
+  { "pattern": /Students enjoy/i, "text": "Students enjoy reading, while some prefer stories." },
+  { "pattern": /teachers explain/i, "text": "The teachers explain chapters quickly, but some learners struggle." },
+  { "pattern": /there were programs/i, "text": "There were programs that encourage reading habits." },
+  { "pattern": /Libraries provide/i, "text": "Libraries provide quiet spaces, yet some students ignore rules." },
+  { "pattern": /some books have/i, "text": "Some books have illustrations, while others are text-only." },
+  { "pattern": /reading is important/i, "text": "Overall, reading is important." },
+  { "pattern": /requires dedication/i, "text": "But it requires dedication." },
+  { "pattern": /students prefer/i, "text": "Some prefer stories." },
+  { "pattern": /learners struggle/i, "text": "Some learners struggle with understanding chapters." }
+],
+[
+  { "pattern": /There are many problems/i, "text": "There are many problems in the city that need attention." },
+  { "pattern": /street lights do not/i, "text": "Roads are broken, and street lights do not work." },
+  { "pattern": /traffic police manage/i, "text": "The traffic police manage intersections, but some drivers ignore rules." },
+  { "pattern": /there were complaints/i, "text": "There were complaints about garbage, yet authorities do not respond." },
+  { "pattern": /hospitals provide/i, "text": "The hospitals provide services, but some patients wait too long." },
+  { "pattern": /parks encourage/i, "text": "There are parks that encourage exercise, but some people ignore them." },
+  { "pattern": /city needs improvement/i, "text": "Overall, the city needs improvement." },
+  { "pattern": /it has potential/i, "text": "But it has potential." },
+  { "pattern": /drivers ignore/i, "text": "Some drivers ignore rules." },
+  { "pattern": /patients wait/i, "text": "Some patients wait too long." }
+],
+
+[
+  { "pattern": /There are many students/i, "text": "There are many students who enjoy sports." },
+  { "pattern": /some of them prefer/i, "text": "Some of them prefer football, while others like basketball." },
+  { "pattern": /coaches explain/i, "text": "The coaches explain rules clearly, but some players struggle to follow." },
+  { "pattern": /there were tournaments/i, "text": "There were tournaments organized every month." },
+  { "pattern": /fields need/i, "text": "The fields need maintenance, and some equipment is broken." },
+  { "pattern": /some students ignore/i, "text": "There are rules for practice, yet some students ignore them." },
+  { "pattern": /referees make/i, "text": "The referees make decisions, but sometimes players argue." },
+  { "pattern": /sports are important/i, "text": "Overall, sports are important." },
+  { "pattern": /it requires teamwork/i, "text": "But it requires teamwork." },
+  { "pattern": /players struggle/i, "text": "Some players struggle to follow rules." }
+],
+[
+  { "pattern": /There is a lot of water/i, "text": "There is a lot of water in the lake, but some areas dry quickly." },
+  { "pattern": /fishermen catch/i, "text": "The fishermen catch fish daily, while birds feed on small insects." },
+  { "pattern": /there were boats/i, "text": "There were boats and nets that help collect fish." },
+  { "pattern": /some parts are/i, "text": "The water level is low, and some parts are polluted." },
+  { "pattern": /some people ignore/i, "text": "There are regulations, yet some people ignore them." },
+  { "pattern": /guards monitor/i, "text": "The guards monitor activities, but sometimes they do not act." },
+  { "pattern": /lake is important/i, "text": "Overall, the lake is important for the community." },
+  { "pattern": /areas dry/i, "text": "Some areas dry quickly." },
+  { "pattern": /birds feed/i, "text": "Birds feed on small insects." },
+  { "pattern": /help collect/i, "text": "Nets help collect fish." }
+],
+[
+  { "pattern": /There are many trees/i, "text": "There are many trees in the park that provide shade." },
+  { "pattern": /Children enjoy/i, "text": "Children enjoy playing, while adults relax on benches." },
+  { "pattern": /flowers die/i, "text": "The gardeners water plants daily, but some flowers die." },
+  { "pattern": /there were benches/i, "text": "There were benches and swings that need repair." },
+  { "pattern": /pathways are clean/i, "text": "The pathways are clean, but some trash is left behind." },
+  { "pattern": /visitors ignore/i, "text": "The security guards ensure safety, but some visitors ignore rules." },
+  { "pattern": /park is important/i, "text": "Overall, the park is important for recreation." },
+  { "pattern": /gardeners water/i, "text": "The gardeners water plants daily." },
+  { "pattern": /benches need/i, "text": "Benches need repair." },
+  { "pattern": /children enjoy/i, "text": "Children enjoy playing." }
+],
+[
+  { "pattern": /There are a lot of cars/i, "text": "There are a lot of cars on the road that cause traffic." },
+  { "pattern": /drivers speed/i, "text": "Drivers speed, while pedestrians wait to cross." },
+  { "pattern": /some signs are/i, "text": "The traffic lights do not work properly, and some signs are missing." },
+  { "pattern": /there were accidents/i, "text": "There were accidents yesterday that affected many people." },
+  { "pattern": /police monitor/i, "text": "The police monitor roads, but some drivers ignore rules." },
+  { "pattern": /traffic is/i, "text": "Overall, traffic is a problem in the city." },
+  { "pattern": /pedestrians wait/i, "text": "Pedestrians wait to cross." },
+  { "pattern": /drivers ignore/i, "text": "Some drivers ignore rules." },
+  { "pattern": /accidents affected/i, "text": "The accidents affected many people." },
+  { "pattern": /cars cause/i, "text": "Cars cause traffic." }
+],
+[
+  { "pattern": /There are many shops/i, "text": "There are many shops in the market that sell clothes." },
+  { "pattern": /vendors offer/i, "text": "Vendors offer discounts, while some items are expensive." },
+  { "pattern": /customers enjoy/i, "text": "The customers enjoy browsing, but some do not buy anything." },
+  { "pattern": /there were stalls/i, "text": "There were stalls that need cleaning." },
+  { "pattern": /authorities ensure/i, "text": "The market authorities ensure safety, but some sellers ignore rules." },
+  { "pattern": /market is/i, "text": "Overall, the market is busy every day." },
+  { "pattern": /items are/i, "text": "Some items are expensive." },
+  { "pattern": /sellers ignore/i, "text": "Some sellers ignore rules." },
+  { "pattern": /shops sell/i, "text": "Shops sell clothes." },
+  { "pattern": /customers do not/i, "text": "Some customers do not buy anything." }
+],
+
+[
+  { "pattern": /There are many students/i, "text": "There are many students in the library who read books." },
+  { "pattern": /some of them prefer/i, "text": "Some of them prefer novels, while others like textbooks." },
+  { "pattern": /librarians organize/i, "text": "The librarians organize shelves, but some books are misplaced." },
+  { "pattern": /there were computers/i, "text": "There were computers and study rooms that help students learn." },
+  { "pattern": /some students have/i, "text": "Some students have notebooks, while others are digital." },
+  { "pattern": /rules of silence are/i, "text": "The rules of silence are often ignored." },
+  { "pattern": /library is important/i, "text": "Overall, the library is important for education." },
+  { "pattern": /students read/i, "text": "Students read books." },
+  { "pattern": /shelves organize/i, "text": "Librarians organize shelves." },
+  { "pattern": /books are misplaced/i, "text": "Some books are misplaced." }
+],
+[
+  { "pattern": /There are many cars/i, "text": "There are many cars parked along the street that block traffic." },
+  { "pattern": /drivers speed/i, "text": "Drivers speed, while pedestrians wait to cross." },
+  { "pattern": /drivers ignore/i, "text": "Some drivers ignore signals." },
+  { "pattern": /traffic police monitor/i, "text": "The traffic police monitor intersections." },
+  { "pattern": /there were streetlights/i, "text": "There were streetlights that do not work." },
+  { "pattern": /streets are dangerous/i, "text": "Overall, the streets are dangerous." },
+  { "pattern": /pedestrians wait/i, "text": "Pedestrians wait to cross." },
+  { "pattern": /cars block/i, "text": "Cars block traffic." },
+  { "pattern": /signals ignore/i, "text": "Drivers ignore signals." },
+  { "pattern": /police monitor/i, "text": "Traffic police monitor intersections." }
+],
+[
+  { "pattern": /There are many animals/i, "text": "There are many animals in the zoo that attract visitors." },
+  { "pattern": /Lions roar/i, "text": "Lions roar loudly, while monkeys play in cages." },
+  { "pattern": /zookeepers feed/i, "text": "The zookeepers feed them daily, but some animals die." },
+  { "pattern": /there were cages/i, "text": "There were cages and enclosures that need repair." },
+  { "pattern": /some animals have/i, "text": "Some animals have unique behaviors, while others are common." },
+  { "pattern": /zoo is important/i, "text": "Overall, the zoo is important for education." },
+  { "pattern": /monkeys play/i, "text": "Monkeys play in cages." },
+  { "pattern": /animals die/i, "text": "Some animals die." },
+  { "pattern": /cages need/i, "text": "Cages need repair." },
+  { "pattern": /animals attract/i, "text": "Animals attract visitors." }
+],
+[
+  { "pattern": /There are many flowers/i, "text": "There are many flowers in the garden that bloom in spring." },
+  { "pattern": /gardeners water/i, "text": "The gardeners water daily, but some plants die." },
+  { "pattern": /birds sing/i, "text": "Birds sing in trees, while butterflies flutter around." },
+  { "pattern": /there were benches/i, "text": "There were benches that need repair." },
+  { "pattern": /garden is beautiful/i, "text": "Overall, the garden is beautiful and peaceful." },
+  { "pattern": /plants die/i, "text": "Some plants die." },
+  { "pattern": /butterflies flutter/i, "text": "Butterflies flutter around." },
+  { "pattern": /flowers bloom/i, "text": "Flowers bloom in spring." },
+  { "pattern": /benches need/i, "text": "Benches need repair." },
+  { "pattern": /gardeners water/i, "text": "Gardeners water daily." }
+],
+[
+  { "pattern": /There are many students/i, "text": "There are many students in the classroom who do not pay attention." },
+  { "pattern": /learners struggle/i, "text": "Some learners struggle." },
+  { "pattern": /teacher explains/i, "text": "The teacher explains lessons." },
+  { "pattern": /there were books/i, "text": "There were books and papers that help in learning." },
+  { "pattern": /some students have/i, "text": "Some students have questions, while others are quiet." },
+  { "pattern": /classroom is noisy/i, "text": "Overall, the classroom is noisy sometimes." },
+  { "pattern": /students do not/i, "text": "Students do not pay attention." },
+  { "pattern": /books help/i, "text": "Books help in learning." },
+  { "pattern": /lessons explain/i, "text": "Teacher explains lessons." },
+  { "pattern": /others are quiet/i, "text": "Other students are quiet." }
+],
+[
+  { "pattern": /There are many birds/i, "text": "There are many birds in the forest that sing beautifully." },
+  { "pattern": /birds build/i, "text": "Some birds build nests, while others hide in trees." },
+  { "pattern": /rangers monitor/i, "text": "The rangers monitor the area, but some animals do not stay safe." },
+  { "pattern": /there were fruits/i, "text": "There were fruits and insects that feed the animals." },
+  { "pattern": /some trees have/i, "text": "Some trees have large leaves, while others are small." },
+  { "pattern": /forest is lively/i, "text": "Overall, the forest is lively and full of life." },
+  { "pattern": /birds sing/i, "text": "Birds sing beautifully." },
+  { "pattern": /animals do not/i, "text": "Some animals do not stay safe." },
+  { "pattern": /feed the animals/i, "text": "Fruits and insects feed the animals." },
+  { "pattern": /trees are small/i, "text": "Other trees are small." }
+],
+
+
+];
+
+let currentQuestion = 0;
+let missedAnswers = [];
+
+// Load question
+function loadQuestion(){
+  document.getElementById("passage").innerText = questions[currentQuestion];
+  document.getElementById("questionNumber").innerText = `Question ${currentQuestion+1} of ${questions.length}`;
+  document.getElementById("answer").value = "";
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("answerBox").style.display = "none";
+  document.getElementById("showBtn").disabled = true;
+}
+
+// Check Answer
+function checkAnswer(){
+  const userText = document.getElementById("answer").value.toLowerCase();
+  const currentCorrections = expectedCorrections[currentQuestion];
+  let correctCount = 0;
+  missedAnswers = [];
+
+  currentCorrections.forEach(item=>{
+    if(item.pattern.test(userText)){ // ✅ check pattern
+      correctCount++;
+    } else {
+      missedAnswers.push(item.text);
+    }
+  });
+
+  const percentScore = Math.round((correctCount / currentCorrections.length) * 100);
+
+  let msg = percentScore >= 70
+    ? "✅ Excellent! Correct subject–verb agreement detected."
+    : percentScore >= 40
+    ? "⚠️ Fair attempt. Some corrections missing or incorrect."
+    : "❌ Poor attempt. Review subject–verb agreement rules.";
+
+  document.getElementById("result").innerHTML = 
+    `Score: ${percentScore}% (${correctCount} of ${currentCorrections.length} correct)<br>${msg}`;
+  document.getElementById("showBtn").disabled = false;
+}
+
+// Show missed answers
+function showAnswers(){
+  const box = document.getElementById("answerBox");
+  if(missedAnswers.length===0){
+    box.innerHTML = "🎉 All answers were correct!";
+  } else {
+    box.innerHTML = "<strong>Correct answers you missed:</strong><br><ol>" +
+      missedAnswers.map(a=>`<li>${a}</li>`).join("") + "</ol>";
+  }
+  box.style.display = "block";
+}
+
+// Navigation
+function nextQuestion(){if(currentQuestion<questions.length-1){currentQuestion++;loadQuestion();}}
+function prevQuestion(){if(currentQuestion>0){currentQuestion--;loadQuestion();}}
+
+// Initial load
+loadQuestion();
+</script>
+</body>
+</html>
